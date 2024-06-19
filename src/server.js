@@ -24,7 +24,6 @@ const options = {
 apis: ["./server.js"],
 };
 const swaggerSpec = swaggerJsdoc(options);
-
 app.use(express.json());
 app.use("/swagger-ui", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(express.urlencoded({ extended: true }));
@@ -32,7 +31,7 @@ app.use(session({
     secret: "secret",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false},
+    cookie: { },
 }))
 
 const password = "m295";
@@ -77,10 +76,9 @@ app.post("/login", (request, response) => {
         request.session.email = loginData.email;
         response.cookie("user", loginData.email, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true});
         return response.status(200).json({ email: request.session.email});
-    }
-    return response.status(403).json({ error: "Forbidden"});
-}   catch (error){
-    console.error(`Error Processing POST request for /login: ${error.message}`);
+    }   return response.status(403).json({ error: "Incorrect password"});
+}catch (error){
+    console.error(`error Processing POST request for /login: ${error.message}`);
     response.status(500).send("server error");}
 });
 
@@ -113,9 +111,9 @@ app.post("/login", (request, response) => {
  *                error:
  *                  type: string
  */
-app.get("/verify", Authenticated,(request, response) => {
+app.get("/verify", Authenticated, (request, response) => {
     try{ console.log("received GET request /verify");
-if (request.session.email) {
+if(request.session.email) {
         return response.status(200).json({ message: "session is verified" });
     }
     return response.status(401).json({ error: "session expired" });
@@ -151,13 +149,11 @@ app.delete("/logout", Authenticated, (request, response) => {
         if (request.session.email) {
         request.session.destroy();
         return response.status(204).json({ message: "session stopped"})
-    }
-    return response.status(401).json({ error: "not logged in"})
+    }   return response.status(401).json({ error: "not logged in"})
     }catch (error) {
         console.error(`error proccessing DELETE /logout: ${error.message}`);
         response.status(500).send("Server error")
-    }
-})
+    }})
 
 //Ich habe mit chatgpt probiert das problem zu fixen
 function Authenticated(request, response, next) {
@@ -169,7 +165,7 @@ function Authenticated(request, response, next) {
         response.status(401).json({ error: 'not logged in'});
     }
 }
-
+//Chatgpt hat das generiert
 let tasks = [
     {
         id: 1,
@@ -247,7 +243,7 @@ app.get("/tasks", Authenticated,(request, response) => {
          response.json(tasks);
     }catch (error) {
         console.error(`Error processing GET request /tasks ${error.message}`);
-        response.status(500).send("Server error");
+        response.status(500).send("Server eror");
     }
    
   });
@@ -299,7 +295,7 @@ app.post("/tasks", Authenticated, (request, response) => {
     try { console.log("Received POST request /tasks");
         const { title, description, dueDate, done } = request.body;
     if (!title || !description || !dueDate || done === undefined)
-      return response.status(422).json({ error: "Unprocessable" });
+      return response.status(422).json({ error: "Unprocessable"});
     const id = tasks.length > 0 ? tasks[tasks.length - 1].id + 1 : 1;
     const newTask = { id, title, description, dueDate, done };
     tasks.push(newTask);
@@ -308,7 +304,7 @@ app.post("/tasks", Authenticated, (request, response) => {
     console.error(`erro processing POST request /tasks: ${error.message}`);
     response.status(500).send("Server error");
 }
-     });
+});
 //Chatgpt verwendet
 /**
  * @openapi
@@ -352,6 +348,7 @@ app.post("/tasks", Authenticated, (request, response) => {
  *         done:
  *           type: boolean
  */
+//Habe chatgpt gefragt wegen der ID (Number)
 app.get("/tasks/:id", Authenticated, (request, response) => {
     try{ console.log(`received GET request for /tasks/${request.params.id}`); 
         const task = tasks.find((task) => task.id ===Number(request.params.id));
@@ -361,7 +358,6 @@ response.status(200).json(task);
     console.log(`error with processing GET request /tasks/${request.params.id}: ${error.message}`);
     response.status(500).send(" server Eror");
 }});
-
 //Chatgpt verwendet
 /**
  * @openapi
@@ -428,6 +424,7 @@ response.status(200).json(task);
  *         done:
  *           type: boolean
  */
+//Chatgpt Number
 app.put("/tasks/:id", Authenticated, (request, response) => {
     try {console.log(`received PUT request for /tasks/${request.params.id}`);
         const id = Number(request.params.id);
