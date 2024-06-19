@@ -31,11 +31,59 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({
     secret: "secret",
     resave: false,
-    saveUninitialized: true,
-    cookie: {},
+    saveUninitialized: false,
+    cookie: { secure: false},
 }))
 
 const password = "m295";
+
+/**
+ * @openapi
+ * /login:
+ *  post:
+ *     tags:
+ *      - Authentication
+ *     summary: Login for Users
+ *     description: User Login with an explicit password.
+ *     responses:
+ *       200:
+ *       description: Succesfully logged in.
+ *       403:
+ *       description: Wrong Password no acces
+ */
+app.post("/login", (request, response) => {
+    const loginData = request.body;
+    if (password === loginData.password) {
+        request.session.email = loginData.email;
+        response.cookie("user", loginData.email, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true});
+        return response.status(200).json({ email: request.session.email});
+    }
+    return response.status(403).json({ error: "Forbidden"});
+});
+
+app.get("/verify", Authenticated,(request, response) => {
+    if (request.session.email) {
+        return response.status(200).json({ message: "Session is verified" });
+    }
+    return response.status(401).json({ error: "Session expired" });
+} )
+
+app.delete("/logout", Authenticated, (request, response) => {
+    if (request.session.email) {
+        request.session.destroy();
+        return response.status(204).json({ message: "Session stopped"})
+    }
+    return response.status(401).json({ error: "Not logged in"})
+})
+
+
+function Authenticated(request, response, next) {
+    if (request.session.email) {
+      next();
+    } else {
+      response.status(401).json({ error: 'Not logged in'});
+    }
+  }
 
 let tasks = [
     {
@@ -109,10 +157,11 @@ let tasks = [
  *           description: The date the task was completed.
  */
 
-app.get("/tasks", (request, response) => {
+app.get("/tasks", Authenticated,(request, response) => {
     response.json(tasks);
   });
 
+//Mit Chatgpt Formatiert
 /**
 * @openapi
 * /tasks:
@@ -136,7 +185,7 @@ app.get("/tasks", (request, response) => {
  * 
  * 
 */
-app.post("/tasks", (request, response) => {
+app.post("/tasks", Authenticated, (request, response) => {
     const { title, description, dueDate, done } = request.body;
     if (!title || !description || !dueDate || done === undefined)
       return response.status(422).json({ error: "Unprocessable" });
@@ -146,14 +195,15 @@ app.post("/tasks", (request, response) => {
     response.status(201).json(newTask);
   });
 
-app.get("/tasks/:id", (request, response) => {
-    const task = tasks.find((task) => task.id === request.params.id);
+app.get("/tasks/:id", Authenticated, (request, response) => {
+    const task = tasks.find((task) => task.id ===Number(request.params.id));
     if (!task) return response.status(404).send("Task not found");
     response.status(200).json(task);
 });
 
-app.put("/tasks/:id", (request, response) => {
+app.put("/tasks/:id", Authenticated,(request, response) => {
     const { title, description, dueDate, done } = request.body;
+    const id = Number(request.params.id)
     if (!id || !title || !description || !dueDate || done === undefined)
         return response.status(422).json({ error: "Unprocessable" });
     const task = tasks.find((task) => task.id === request.params.id);
@@ -162,7 +212,7 @@ app.put("/tasks/:id", (request, response) => {
     response.status(200).json(task);
 });
 
-app.delete("/tasks/:id", (request, response) => {
+app.delete("/tasks/:id", Authenticated,(request, response) => {
     const taskId = tasks.findIndex(
       (task) => task.id === Number(request.params.id)
     );
