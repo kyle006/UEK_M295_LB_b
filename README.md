@@ -1,6 +1,7 @@
 # UEK_M295_LB_b
-Author: Kyle Meier
+Author: Kyle Meier 
 
+README wurde mit Chatgpt teilweise erstellt.
 ## Description
 THis is a simple REST API for Tasks. It allows the User to create new Task, update already existing ones, delete tasks and get a list of all the tasks.
 ### Git Repository
@@ -13,8 +14,6 @@ THis is a simple REST API for Tasks. It allows the User to create new Task, upda
 4. Navigate into the src directory: `cd src`
 4. Start the server: `node server.js`
 The server will be accesible at `http://localhost:3000`
-
-## 
 
 ## API Endpoints
 The documentation for all the API enpoints are also accesible at `http://localhost:3000/swagger-ui` here a brief explanation:
