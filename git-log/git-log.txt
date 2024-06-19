@@ -150,3 +150,33 @@ Author: Kyle Meier <117977568+kyle006@users.noreply.github.com>
 Date:   Wed Jun 19 13:16:46 2024 +0200
 
     Create .gitignore
+
+commit f605fa8b53a5eb86923b73c77098960d1fe88d63
+Author: kyle006 <117977568+kyle006@users.noreply.github.com>
+Date:   Wed Jun 19 13:09:14 2024 +0200
+
+    Update server.js to require authentication for task endpoints and swagger documentation added
+
+commit f8ba4ff2f0f84cf3f922b7c1bb849da60d68865d
+Author: kyle006 <117977568+kyle006@users.noreply.github.com>
+Date:   Wed Jun 19 10:52:26 2024 +0200
+
+    Update server.js to require authentication for task endpoints
+
+commit 8ba905a7e2da7f3f969ec9453736599eec2e2fdd
+Author: kyle006 <117977568+kyle006@users.noreply.github.com>
+Date:   Wed Jun 19 09:40:50 2024 +0200
+
+    chore: Add OpenAPI documentation for tasks endpoints
+
+commit a181512673fae636517395bf8f1fd1aae516a5d3
+Author: kyle006 <117977568+kyle006@users.noreply.github.com>
+Date:   Wed Jun 19 09:06:28 2024 +0200
+
+    chore: Add initial project files and configuration
+
+commit a9534074549f49462e36abe4fb734cbd0de007f1
+Author: Kyle Meier <117977568+kyle006@users.noreply.github.com>
+Date:   Wed Jun 19 09:02:58 2024 +0200
+
+    Initial commit
