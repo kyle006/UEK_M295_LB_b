@@ -27,5 +27,4 @@ The documentation for all the API enpoints are also accesible at `http://localho
 - `DELETE /tasks/:id`: Deletes the task with the given id.
 
 ## License
-
 This project is licensed under the MIT License. See the LICENSE file for details.
