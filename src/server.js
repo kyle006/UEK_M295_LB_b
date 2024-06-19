@@ -433,10 +433,10 @@ app.put("/tasks/:id", Authenticated, (request, response) => {
         if (taskId === -1) {
             response.status(404).json({ message: 'Task not found' });
         } else {
-            tasks[taskId].title = request.body.title || tasks[taskIndex].title;
-            tasks[taskId].description = request.body.description || tasks[taskIndex].description;
-            tasks[taskId].done = request.body.done !== undefined ? request.body.done : tasks[taskIndex].done;
-            tasks[taskId].dueDate = request.body.dueDate || tasks[taskIndex].dueDate;
+            tasks[taskId].title = request.body.title || tasks[taskId].title;
+            tasks[taskId].description = request.body.description || tasks[taskId].description;
+            tasks[taskId].done = request.body.done !== undefined ? request.body.done : tasks[taskId].done;
+            tasks[taskId].dueDate = request.body.dueDate || tasks[taskId].dueDate;
 
             response.json(tasks[taskId]);
         }
