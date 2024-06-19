@@ -43,10 +43,10 @@ const password = "m295";
  *  post:
  *     tags:
  *      - Authentication
- *     summary: Login for users
- *     description: User login with an explicit password
+ *     summary: login for users
+ *     description: user login with an explicit password
  *     requestBody:
- *       description: Login data
+ *       description: login data
  *       required: true
  *       content:
  *         application/json:
@@ -59,7 +59,7 @@ const password = "m295";
  *                 type: string
  *     responses:
  *       200:
- *         description: Successfully logged in
+ *         description: successfully logged in
  *         content:
  *           application/json:
  *             schema:
@@ -68,7 +68,7 @@ const password = "m295";
  *                 email:
  *                   type: string
  *       403:
- *         description: Wrong password no access
+ *         description: wrong password no access
  */
 app.post("/login", (request, response) => {
     try{ console.log("received POST request for /login");
@@ -80,7 +80,7 @@ app.post("/login", (request, response) => {
     }
     return response.status(403).json({ error: "Forbidden"});
 }   catch (error){
-    console.error(`error processing POST request /login: ${error.message}`);
+    console.error(`Error Processing POST request for /login: ${error.message}`);
     response.status(500).send("server error");}
 });
 
@@ -154,7 +154,7 @@ app.delete("/logout", Authenticated, (request, response) => {
     }
     return response.status(401).json({ error: "not logged in"})
     }catch (error) {
-        console.error(`error processing DELETE /logout: ${error.message}`);
+        console.error(`error proccessing DELETE /logout: ${error.message}`);
         response.status(500).send("Server error")
     }
 })
@@ -165,7 +165,7 @@ function Authenticated(request, response, next) {
       next();
     } else {
       response.status(401).json({ error: 'not logged in'});
-    }
+}
   }
 
 let tasks = [
@@ -241,10 +241,10 @@ let tasks = [
  */
 
 app.get("/tasks", Authenticated,(request, response) => {
-    try {console.log("received GET request for /tasks");
+    try {console.log("recieved GET request for /tasks");
          response.json(tasks);
     }catch (error) {
-        console.error(`Error processing GET request /tasks: ${error.message}`);
+        console.error(`Error processing GET request /tasks ${error.message}`);
         response.status(500).send("Server error");
     }
    
@@ -294,7 +294,7 @@ app.get("/tasks", Authenticated,(request, response) => {
  *          format: date
  */
 app.post("/tasks", Authenticated, (request, response) => {
-    try { console.log("Received POST request for /tasks");
+    try { console.log("Received POST request /tasks");
         const { title, description, dueDate, done } = request.body;
     if (!title || !description || !dueDate || done === undefined)
       return response.status(422).json({ error: "Unprocessable" });
@@ -303,7 +303,7 @@ app.post("/tasks", Authenticated, (request, response) => {
     tasks.push(newTask);
     response.status(201).json(newTask);
 }catch (error) {
-    console.error(`error processing POST request /tasks: ${error.message}`);
+    console.error(`erro processing POST request /tasks: ${error.message}`);
     response.status(500).send("Server error");
 }
      });
@@ -357,7 +357,7 @@ app.get("/tasks/:id", Authenticated, (request, response) => {
 response.status(200).json(task);
 } catch (error) {
     console.log(`error with processing GET request /tasks/${request.params.id}: ${error.message}`);
-    response.status(500).send(" server Error");
+    response.status(500).send(" server Eror");
 }});
 
 //Chatgpt verwendet
@@ -441,7 +441,7 @@ app.put("/tasks/:id", Authenticated, (request, response) => {
             response.json(tasks[taskId]);
         }
 } catch (error) {
-        console.error(`error with updating /tasks/${request.params.id}: ${error.message}`);
+        console.error(`error with updating the /tasks/${request.params.id}: ${error.message}`);
         response.status(500).json({ message: 'Internal server error' });
     }
 });
