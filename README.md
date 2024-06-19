@@ -3,6 +3,8 @@ Author: Kyle Meier
 
 ## Description
 THis is a simple REST API for Tasks. It allows the User to create new Task, update already existing ones, delete tasks and get a list of all the tasks.
+### Git Repository
+- Link: https://github.com/kyle006/UEK_M295_LB_b
 
 ## Development Environment Setup
 1. Clone the repository: `git clone https://github.com/kyle006/UEK_M295_LB_b.git`
