@@ -124,7 +124,7 @@ if (request.session.email) {
         response.status(500).send("server error")
     }
 } );
-
+//chatgpt formatiert
 /**
  * @openapi
  * /logout:
