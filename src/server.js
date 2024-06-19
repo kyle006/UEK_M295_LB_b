@@ -159,14 +159,16 @@ app.delete("/logout", Authenticated, (request, response) => {
     }
 })
 
-
+//Ich habe mit chatgpt probiert das problem zu fixen
 function Authenticated(request, response, next) {
     if (request.session.email) {
-      next();
+        response.token = 'funnytoken';
+        response.locals.token = 'funnytoken';
+        next();
     } else {
-      response.status(401).json({ error: 'not logged in'});
+        response.status(401).json({ error: 'not logged in'});
+    }
 }
-  }
 
 let tasks = [
     {
